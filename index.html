@@ -336,6 +336,8 @@ body:not(.locked) .music{opacity:1;visibility:visible}
   .frame{max-width:780px;margin:0 auto;border-radius:30px;border:12px solid #8a5a34;box-shadow:0 0 0 4px #5e3b1f,inset 0 0 0 3px rgba(0,0,0,.35),0 34px 60px rgba(8,30,18,.5)}
 }
 @media (max-width:899px){
+  .hero{padding:max(72px,calc(env(safe-area-inset-top,0px) + 64px)) 14px 0}
+  .frame{border-radius:24px;border:7px solid #8a5a34;box-shadow:0 0 0 3px #5e3b1f,0 18px 34px rgba(8,30,18,.45)}
   .title>.wrap{margin-top:18px;border-radius:30px 30px 38px 38px;padding-top:44px}
 }
 @media (max-width:720px){
@@ -347,9 +349,10 @@ body:not(.locked) .music{opacity:1;visibility:visible}
 .gate{background:linear-gradient(#8fd0ec 0%,#cfeaf4 40%,#9bd49a 72%,#3f8a3c 100%)}
 .gate::before{display:block}
 .gate-wrap{position:relative;z-index:2;display:grid;gap:18px;justify-items:center;text-align:center}
-.gate-top{font-size:clamp(1.8rem,7vw,2.4rem);color:var(--brick);text-shadow:0 2px 0 #fff}
+.gate-top{transition:opacity .4s ease;font-size:clamp(1.8rem,7vw,2.4rem);color:var(--brick);text-shadow:0 2px 0 #fff}
+.gate.opening .gate-top{opacity:0}
 .gate-low{font-family:var(--display);font-weight:600;color:var(--forest);font-size:1.05rem}
-.env{appearance:none;border:0;background:none;padding:0;cursor:pointer;position:relative;display:block;width:min(88vw,400px);aspect-ratio:1.5;margin-top:130px;filter:drop-shadow(0 24px 22px rgba(15,45,25,.35));animation:envIn .9s cubic-bezier(.2,1.2,.3,1) both}
+.env{appearance:none;border:0;background:none;padding:0;cursor:pointer;position:relative;display:block;width:min(88vw,400px);aspect-ratio:1.5;margin-top:20px;filter:drop-shadow(0 24px 22px rgba(15,45,25,.35));animation:envIn .9s cubic-bezier(.2,1.2,.3,1) both}
 .env>*{position:absolute;display:block}
 .env-back{inset:0;background:#cfa85a;border-radius:10px}
 .letter{left:6%;right:6%;top:7%;height:86%;z-index:1;background:#fffbf0;border:3px solid var(--straw);border-radius:8px;display:grid;place-content:center;gap:2px;text-align:center;transition:transform 1.1s cubic-bezier(.3,1,.4,1) .65s}
@@ -510,7 +513,6 @@ body:not(.locked) .music{opacity:1;visibility:visible}
     </div>
     <p class="done" id="cd-done" hidden></p>
     <p class="phrase rise d2" id="phrase"></p>
-    <div class="chips rise d2"><span>Domingo 29/11</span><span>18:30 a 22:30 hs</span><span>Italia 2382</span></div>
   </div>
 </section>
 
@@ -542,7 +544,6 @@ body:not(.locked) .music{opacity:1;visibility:visible}
     </div>
 
     <div class="game rise">
-      <span class="tag script">Mini juego del cuento</span>
       <h3>¡Ayudá al lobo a soplar!</h3>
       <p class="say" id="say" aria-live="polite">Tocá el botón y mirá qué casita aguanta.</p>
       <div class="arena">
@@ -674,7 +675,7 @@ body:not(.locked) .music{opacity:1;visibility:visible}
     if(opened) return; opened=true; started=true;
     vid.muted=false; var pr=vid.play(); if(pr&&pr.then){ pr.then(function(){ vid.pause(); vid.currentTime=0; },function(){}); }
     playMusic(); setVSoundUI();
-    $('open').classList.add('open');
+    $('open').classList.add('open'); $('gate').classList.add('opening');
     hideAddressBar();
     var sr=$('seal').getBoundingClientRect();
     setTimeout(function(){ burst(sr.left+sr.width/2,sr.top+sr.height/2,90); },300);
@@ -702,7 +703,7 @@ body:not(.locked) .music{opacity:1;visibility:visible}
     var now=Date.now(), diff=T-now;
     if(diff<=0){ $('clock').hidden=true; var d=$('cd-done'); d.hidden=false; d.textContent= now<E ? '¡La fiesta ya empezó! Vení que te esperamos.' : '¡Gracias por acompañar a Fabricio!'; return; }
     var s=Math.floor(diff/1000);
-    var dd=Math.floor(s/86400); $('phrase').textContent = dd>=10?'Falta bastante: el lobo todavía está practicando su soplido.':dd>=4?'Los chanchitos ya están armando las casitas.':dd>=1?'¡Ya casi! El lobo está afilando el soplido.':'¡Es hoy! Nos vemos a las 18:30.';
+    var dd=Math.floor(s/86400); $('phrase').textContent = dd>=10?'¡Ya falta poquito! Los chanchitos están preparando la fiesta.':dd>=4?'Los chanchitos ya están armando las casitas.':dd>=1?'¡Ya casi! El lobo está afilando el soplido.':'¡Es hoy! Nos vemos a las 18:30.';
     setN('cd-d',''+Math.floor(s/86400)); setN('cd-h',pad(Math.floor(s%86400/3600))); setN('cd-m',pad(Math.floor(s%3600/60))); setN('cd-s',pad(s%60));
   }
   tick(); setInterval(tick,1000);
